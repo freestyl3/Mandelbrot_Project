@@ -12,7 +12,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class MainFrame extends JFrame {
-    private final FractalPainter fPainter = new FractalPainter(-2.0, 1.0, -1.0, 1.0);
+    private final FractalPainter fPainter = new FractalPainter(-2.0, 1.0, -1.5, 1.5);
     private final JPanel mainPanel = new JPanel(){
         @Override
         public void paint(Graphics g){
@@ -24,7 +24,7 @@ public class MainFrame extends JFrame {
     public MainFrame(){
         mainPanel.setBackground(Color.WHITE);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setMinimumSize(new Dimension(600, 500));
+        setMinimumSize(new Dimension(600, 600));
         add(mainPanel);
 
         selector.setColor(Color.BLUE);
