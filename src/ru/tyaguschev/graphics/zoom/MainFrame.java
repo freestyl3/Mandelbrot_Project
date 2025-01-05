@@ -13,15 +13,15 @@ import java.awt.event.MouseEvent;
 
 public class MainFrame extends JFrame {
     private final FractalPainter fPainter = new FractalPainter(-2.0, 1.0, -1.5, 1.5);
-    private final JPanel mainPanel = new JPanel(){
+    private final JPanel mainPanel = new JPanel() {
         @Override
-        public void paint(Graphics g){
+        public void paint(Graphics g) {
             fPainter.paint(g);
         }
     };
     private final AreaSelector selector = new AreaSelector();
 
-    public MainFrame(){
+    public MainFrame() {
         mainPanel.setBackground(Color.WHITE);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setMinimumSize(new Dimension(600, 600));
@@ -53,10 +53,10 @@ public class MainFrame extends JFrame {
                 Rect rect = selector.getRect();
                 if (rect != null) {
                     Converter converter = fPainter.getConverter();
-                    var xMin = converter.xScr2Crt(rect.getStartPoint().x);
-                    var yMin = converter.yScr2Crt(rect.getStartPoint().y);
-                    var xMax = converter.xScr2Crt(rect.getStartPoint().x + rect.getWidth());
-                    var yMax = converter.yScr2Crt(rect.getStartPoint().y + rect.getHeigth());
+                    var xMin = converter.xScreenToCartesian(rect.getStartPoint().x);
+                    var yMin = converter.yScreenToCartesian(rect.getStartPoint().y);
+                    var xMax = converter.xScreenToCartesian(rect.getStartPoint().x + rect.getWidth());
+                    var yMax = converter.yScreenToCartesian(rect.getStartPoint().y + rect.getHeigth());
                     fPainter.updateCoordinates(xMin, xMax, yMin, yMax);
                     mainPanel.repaint();
                 }
