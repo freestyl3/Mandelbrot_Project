@@ -46,6 +46,7 @@ public class Rect {
             point2 = point;
             point2.x = Math.max(0, Math.min(point.x, this.maxWidth));
             point2.y = Math.max(0, Math.min(point.y, this.maxHeight));
+//            System.out.println(point2.x + ", " + point2.y);
         }
         else
             point1 = point;
