@@ -15,6 +15,13 @@ public class Rect {
      * Вторая установленная точка для формирования прямоугольной области
      */
     private Point point2 = null;
+    private final int maxWidth;
+    private final int maxHeight;
+
+    public Rect(int maxWidth, int maxHeight) {
+        this.maxWidth = maxWidth;
+        this.maxHeight = maxHeight;
+    }
 
     /**
      * Проверка возможности построения прямоугольника
@@ -35,8 +42,11 @@ public class Rect {
      * @see #clearPoints()
      */
     public void addPoint(Point point){
-        if (point1 != null)
+        if (point1 != null) {
             point2 = point;
+            point2.x = Math.max(0, Math.min(point.x, this.maxWidth));
+            point2.y = Math.max(0, Math.min(point.y, this.maxHeight));
+        }
         else
             point1 = point;
     }
@@ -47,8 +57,8 @@ public class Rect {
      */
     public Point getStartPoint(){
         return isValid() ? new Point(
-                Math.min(point1.x,point2.x),
-                Math.min(point1.y,point2.y)) : null;
+                Math.max(0, Math.min(point1.x,point2.x)),
+                Math.max(0, Math.min(point1.y,point2.y))) : null;
     }
 
     /**

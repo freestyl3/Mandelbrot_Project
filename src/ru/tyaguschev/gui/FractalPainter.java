@@ -29,10 +29,25 @@ public class FractalPainter implements Painter {
 //                var color = mandelbrot.isInSet(new ComplexNumber.Base(x, y)) ? Color.BLACK : Color.WHITE;
                     double multiplier = 1 - mandelbrot.isInSet(new ComplexNumber.Base(x, y));
                     var color = new Color(
-                            (int) (255 * multiplier),
-                            (int) (255 * multiplier),
-                            (int) (255 * multiplier)
+                            (int) (255 * multiplier * (Math.abs(Math.cos(multiplier + Math.PI / 2)))),
+                            (int) (255 * multiplier * (Math.abs(Math.cos(multiplier + Math.PI / 3)))),
+                            (int) (255 * multiplier * (Math.abs(Math.cos(multiplier + Math.PI / 5))))
                     );
+//                    var color = new Color(
+//                            (int) (255 * multiplier * (1 - Math.abs(Math.cos(multiplier + Math.PI / 2)))),
+//                            (int) (255 * multiplier * (1 - Math.abs(Math.cos(multiplier + Math.PI / 3)))),
+//                            (int) (255 * multiplier * (1 - Math.abs(Math.cos(multiplier + Math.PI / 5))))
+//                    );
+//                    var color = new Color(
+//                            (int) (205 * multiplier * Math.sin(Math.PI/2)),
+//                            (int) (155 * multiplier * Math.sin(Math.PI/2)),
+//                            (int) (197 * 4 * multiplier * (1 + multiplier * Math.cos(Math.PI)))
+//                    );
+//                    var color = new Color(
+//                            Math.min(255, (int) (-1216.67 * multiplier * multiplier + 1271.67 * multiplier)),
+//                            (int) (-292.22 * multiplier * multiplier + 329.22 * multiplier),
+//                            (int) (87.78 * multiplier * multiplier + 1.22 * multiplier)
+//                    );
                     synchronized (g){
                         g.setColor(color);
                         g.fillRect(iCopy, j, 1, 1);
@@ -53,6 +68,8 @@ public class FractalPainter implements Painter {
                 InterruptedException e) {
             throw new RuntimeException(e);
         }
+
+//        System.out.println(threads.toArray().length);
     }
 
     public Converter getConverter() {

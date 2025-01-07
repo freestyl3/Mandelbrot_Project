@@ -9,9 +9,13 @@ import java.awt.*;
  * выбираемой при помощи мыши области
  */
 public class AreaSelector {
-    private final Rect rect = new Rect();
+    private final Rect rect;
     private Graphics mainGraphics;
     private Color color;
+
+    public AreaSelector(int maxWidth, int maxHeigth) {
+        this.rect = new Rect(maxWidth, maxHeigth);
+    }
 
     /**
      * Получение объекта графики, с помощью которого осуществляется вывод изображения
