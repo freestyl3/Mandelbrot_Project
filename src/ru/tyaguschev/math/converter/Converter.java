@@ -17,7 +17,7 @@ public class Converter {
             double yMax,
             int width,
             int height
-    ){
+    ) {
         setXShape(xMin, xMax);
         setYShape(yMin, yMax);
         setWidth(width);
@@ -74,38 +74,39 @@ public class Converter {
         this.height = abs(height);
     }
 
-    public double getXDen(){
+    public double getXDen() {
         return width / (xMax - xMin);
     }
 
-    public double getYDen(){
+    public double getYDen() {
         return height / (yMax - yMin);
     }
 
     /**
      * Метод преобразования координаты из декартовой системы в экранную
+     *
      * @param x декартовая система координат
      * @return экранная система координат, соответствующая указанной декартовой координате
      */
-    public int xCrt2Scr(double x){
+    public int xCartesianToScreen(double x) {
         var v = ((x - xMin) * getXDen());
         if (v < -width) v = -width;
         if (v > 2 * width) v = 2 * width;
-        return (int)v;
+        return (int) v;
     }
 
-    public int yCrt2Scr(double y){
+    public int yCartesianToScreen(double y) {
         var v = ((yMax - y) * getYDen());
         if (v < -height) v = -height;
         if (v > 2 * height) v = 2 * height;
-        return (int)v;
+        return (int) v;
     }
 
-    public double xScr2Crt(int x){
-        return (double)x / getXDen() + xMin;
+    public double xScreenToCartesian(int x) {
+        return (double) x / getXDen() + xMin;
     }
 
-    public double yScr2Crt(int y){
-        return yMax - (double)y / getYDen();
+    public double yScreenToCartesian(int y) {
+        return yMax - (double) y / getYDen();
     }
 }

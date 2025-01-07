@@ -5,8 +5,9 @@ import ru.tyaguschev.math.complex.ComplexNumber;
 import ru.tyaguschev.math.converter.Converter;
 
 import java.awt.*;
+import java.util.ArrayList;
 
-public class FractalPainter implements Painter{
+public class FractalPainter implements Painter {
     private final Mandelbrot mandelbrot = new Mandelbrot();
     private final Converter converter;
     private int degree;
@@ -18,20 +19,39 @@ public class FractalPainter implements Painter{
 
     @Override
     public void paint(Graphics g) {
+        ArrayList<Thread> threads = new ArrayList<>();
         for (int i = 0; i < converter.getWidth(); i++) {
-            for (int j = 0; j < converter.getHeight(); j++) {
-                var x = converter.xScr2Crt(i);
-                var y = converter.yScr2Crt(j);
+            int iCopy = i;
+            Runnable task = () -> {
+                for (int j = 0; j < converter.getHeight(); j++) {
+                    var x = converter.xScreenToCartesian(iCopy);
+                    var y = converter.yScreenToCartesian(j);
 //                var color = mandelbrot.isInSet(new ComplexNumber.Base(x, y)) ? Color.BLACK : Color.WHITE;
-                double multiplier = 1 - mandelbrot.isInSet(new ComplexNumber.Base(x, y));
-                var color = new Color(
-                        (int) (255 * multiplier),
-                        (int) (255 * multiplier),
-                        (int) (255 * multiplier)
-                );
-                g.setColor(color);
-                g.fillRect(i, j, 1, 1);
+                    double multiplier = 1 - mandelbrot.isInSet(new ComplexNumber.Base(x, y));
+                    var color = new Color(
+                            (int) (255 * multiplier),
+                            (int) (255 * multiplier),
+                            (int) (255 * multiplier)
+                    );
+                    synchronized (g){
+                        g.setColor(color);
+                        g.fillRect(iCopy, j, 1, 1);
+                    }
+                }
+            };
+            threads.add(
+                    new Thread(task)
+            );
+            threads.getLast().start();
+        }
+
+        try {
+            for (Thread thread : threads) {
+                thread.join();
             }
+        } catch (
+                InterruptedException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -51,8 +71,8 @@ public class FractalPainter implements Painter{
         }
         converter.setXShape(xMin, xMax);
         converter.setYShape(yMin, yMax);
-        this.degree = Math.min(6, -((int)(Math.log10(xMax - xMin))));
-        mandelbrot.setMaxIter((int)(200 * Math.pow(2, this.degree)));
+        this.degree = Math.min(6, -((int) (Math.log10(xMax - xMin))));
+        mandelbrot.setMaxIter((int) (200 * Math.pow(2, this.degree)));
 //        System.out.println(mandelbrot.getMaxIter());
     }
 

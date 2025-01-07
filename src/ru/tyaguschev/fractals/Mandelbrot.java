@@ -4,7 +4,7 @@ import ru.tyaguschev.math.complex.ComplexNumber;
 
 public class Mandelbrot {
     private final double r2 = 4.0;
-    private int maxIter = 200;
+    private int maxIter = 5000;
 
     public double isInSet(ComplexNumber complex) {
         ComplexNumber z = new ComplexNumber.Base();

@@ -15,6 +15,7 @@ public class AreaSelector {
 
     /**
      * Получение объекта графики, с помощью которого осуществляется вывод изображения
+     *
      * @return объект класса {@link Graphics}
      */
     public Graphics getGraphics() {
@@ -23,11 +24,12 @@ public class AreaSelector {
 
     /**
      * Задание основного объекта графики для отображения
+     *
      * @param graphics объект класс {@link Graphics}, используемый для
-     * отрисовки изображения
+     *                 отрисовки изображения
      */
     public void setGraphics(Graphics graphics) {
-        if (mainGraphics == null){
+        if (mainGraphics == null) {
             // Если mainGraphics устанавливается впервые,
             // будет выполнена инициализация режима XOR
             // для устранения возможности появления артефактов.
@@ -41,6 +43,7 @@ public class AreaSelector {
 
     /**
      * Получение цвета рамки
+     *
      * @return цвет рамки
      */
     public Color getColor() {
@@ -49,6 +52,7 @@ public class AreaSelector {
 
     /**
      * Задание цвета рамки
+     *
      * @param color цвет рамки
      */
     public void setColor(Color color) {
@@ -58,9 +62,9 @@ public class AreaSelector {
     /**
      * Отрисовка прямоугольной области, сформированной двумя заданными точками
      */
-    public void paint () {
-        var startPoint =rect.getStartPoint();
-        if (startPoint!= null) {
+    public void paint() {
+        var startPoint = rect.getStartPoint();
+        if (startPoint != null) {
             mainGraphics.setXORMode(Color.WHITE);
             mainGraphics.setColor(color);
             mainGraphics.drawRect(
@@ -76,16 +80,17 @@ public class AreaSelector {
     /**
      * Добавление точки в прямоугольную область, вокруг которой следует
      * отрисовать рамку
+     *
      * @param point добавляемая точка
      */
-    public void addPoint(Point point){
+    public void addPoint(Point point) {
         rect.addPoint(point);
     }
 
     /**
      * Очистка выбранной прямоугольной области путём удаления сформировавших ее точек
      */
-    public void clearSelection(){
+    public void clearSelection() {
         rect.clearPoints();
     }
 
