@@ -41,15 +41,16 @@ public class Rect {
      * @param point точка, координаты которой будут добавлены в прямоугольную область
      * @see #clearPoints()
      */
-    public void addPoint(Point point){
+    public void addPoint(Point point) {
         if (point1 != null) {
             point2 = point;
             point2.x = Math.max(0, Math.min(point.x, this.maxWidth));
             point2.y = Math.max(0, Math.min(point.y, this.maxHeight));
 //            System.out.println(point2.x + ", " + point2.y);
-        }
-        else
+        } else {
             point1 = point;
+//            System.out.println(point1.x + ", " + point1.y);
+        }
     }
 
     /**

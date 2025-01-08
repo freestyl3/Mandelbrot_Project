@@ -6,11 +6,13 @@ import ru.tyaguschev.math.converter.Converter;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class FractalPainter implements Painter {
     private final Mandelbrot mandelbrot = new Mandelbrot();
     private final Converter converter;
     private int degree;
+    private double ratio = 1.0;
 
     public FractalPainter(double xMin, double xMax, double yMin, double yMax) {
         this.converter = new Converter(xMin, xMax, yMin, yMax, 0, 0);
@@ -77,20 +79,47 @@ public class FractalPainter implements Painter {
     }
 
     public void updateCoordinates(double xMin, double xMax, double yMin, double yMax) {
-        if (Math.abs(xMax - xMin) > Math.abs(yMax - yMin)) {
-            var delta = (Math.abs(xMax - xMin) - Math.abs(yMin - yMax)) / 2;
+//        var coordinates = saveAspectRatio(xMin, xMax, yMin, yMax);
+//        System.out.println(ratio);
+        var deltaX = Math.abs(xMax - xMin);
+        var deltaY = Math.abs(yMax - yMin) * this.ratio;
+        var delta = Math.abs(deltaX - deltaY) / 2;
+        if (deltaX > deltaY) {
+//            var delta = (Math.abs(xMax - xMin) - Math.abs(yMin - yMax)) / 2;
             yMin += delta;
             yMax -= delta;
+//            yMin /= ratio;
+//            yMax /= ratio;
         } else {
-            var delta = (Math.abs(yMin - yMax) - Math.abs(xMax - xMin)) / 2;
+//            var delta = (Math.abs(yMin - yMax) - Math.abs(xMax - xMin)) / 2;
             xMin -= delta;
             xMax += delta;
+//            xMin *= ratio;
+//            xMax *= ratio;
         }
         converter.setXShape(xMin, xMax);
         converter.setYShape(yMin, yMax);
         this.degree = Math.min(6, -((int) (Math.log10(xMax - xMin))));
         mandelbrot.setMaxIter((int) (200 * Math.pow(2, this.degree)));
-        System.out.println(mandelbrot.getMaxIter());
+//        System.out.println(mandelbrot.getMaxIter());
+    }
+
+    public void updateRatio(double ratio) {
+        this.ratio = ratio;
+    }
+
+    public void saveAspectRatio(double xMin, double xMax, double yMin, double yMax) {
+        var deltaX = Math.abs(xMax - xMin);
+        var deltaY = Math.abs(yMax - yMin) * ratio;
+        if (deltaX > deltaY) {
+            yMin /= ratio;
+            yMax /= ratio;
+        } else {
+            xMin *= ratio;
+            xMax *= ratio;
+        }
+        converter.setXShape(xMin, xMax);
+        converter.setYShape(yMin, yMax);
     }
 
 

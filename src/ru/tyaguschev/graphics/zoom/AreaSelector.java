@@ -9,7 +9,7 @@ import java.awt.*;
  * выбираемой при помощи мыши области
  */
 public class AreaSelector {
-    private final Rect rect;
+    private Rect rect;
     private Graphics mainGraphics;
     private Color color;
 
@@ -100,6 +100,10 @@ public class AreaSelector {
 
     public Rect getRect() {
         return rect.getStartPoint() != null ? this.rect : null;
+    }
+
+    public void updateCoordinates(int maxWidth, int maxHeigth) {
+        this.rect = new Rect(maxWidth, maxHeigth);
     }
 
 }
