@@ -18,60 +18,54 @@ public class FractalPainter implements Painter {
         this.converter = new Converter(xMin, xMax, yMin, yMax, 0, 0);
         this.degree = 0;
     }
-
+    private final ArrayList<Thread> threads = new ArrayList<>();
     @Override
     public void paint(Graphics g) {
-        ArrayList<Thread> threads = new ArrayList<>();
-        for (int i = 0; i <= converter.getWidth(); i++) {
-            int iCopy = i;
-            Runnable task = () -> {
-                for (int j = 0; j <= converter.getHeight(); j++) {
-                    var x = converter.xScreenToCartesian(iCopy);
-                    var y = converter.yScreenToCartesian(j);
-//                var color = mandelbrot.isInSet(new ComplexNumber.Base(x, y)) ? Color.BLACK : Color.WHITE;
-                    double multiplier = 1 - mandelbrot.isInSet(new ComplexNumber.Base(x, y));
-                    var color = new Color(
-                            (int) (255 * multiplier * (Math.abs(Math.cos(multiplier + Math.PI / 2)))),
-                            (int) (255 * multiplier * (Math.abs(Math.cos(multiplier + Math.PI / 3)))),
-                            (int) (255 * multiplier * (Math.abs(Math.cos(multiplier + Math.PI / 5))))
-                    );
-//                    var color = new Color(
-//                            (int) (255 * multiplier * (1 - Math.abs(Math.cos(multiplier + Math.PI / 2)))),
-//                            (int) (255 * multiplier * (1 - Math.abs(Math.cos(multiplier + Math.PI / 3)))),
-//                            (int) (255 * multiplier * (1 - Math.abs(Math.cos(multiplier + Math.PI / 5))))
-//                    );
-//                    var color = new Color(
-//                            (int) (205 * multiplier * Math.sin(Math.PI/2)),
-//                            (int) (155 * multiplier * Math.sin(Math.PI/2)),
-//                            (int) (197 * 4 * multiplier * (1 + multiplier * Math.cos(Math.PI)))
-//                    );
-//                    var color = new Color(
-//                            Math.min(255, (int) (-1216.67 * multiplier * multiplier + 1271.67 * multiplier)),
-//                            (int) (-292.22 * multiplier * multiplier + 329.22 * multiplier),
-//                            (int) (87.78 * multiplier * multiplier + 1.22 * multiplier)
-//                    );
-                    synchronized (g){
-                        g.setColor(color);
-                        g.fillRect(iCopy, j, 1, 1);
-                    }
-                }
-            };
-            threads.add(
-                    new Thread(task)
-            );
-            threads.getLast().start();
-        }
-
         try {
+            for (Thread thread : threads) {
+                synchronized (g){
+                    thread.interrupt();
+                }
+            }
+            threads.clear();
+
+            int numThreads = 8;
+
+            int width = converter.getWidth() + 1;
+            int height = converter.getHeight() + 1;
+
+            int segmentWidth = width / numThreads;
+            for (int t = 0; t < numThreads; t++) {
+                int startX = t * segmentWidth;
+                int endX = (t == numThreads - 1) ? width : startX + segmentWidth;
+
+                Runnable task = () -> {
+                    for (int i = startX; i < endX; i++) {
+                        for (int j = 0; j <= height; j++) {
+                            var x = converter.xScreenToCartesian(i);
+                            var y = converter.yScreenToCartesian(j);
+                            double multiplier = 1 - mandelbrot.isInSet(new ComplexNumber.Base(x, y));
+                            var color = new Color(
+                                    (int) (255 * multiplier * (Math.abs(Math.cos(multiplier + Math.PI / 2)))),
+                                    (int) (255 * multiplier * (Math.abs(Math.cos(multiplier + Math.PI / 3)))),
+                                    (int) (255 * multiplier * (Math.abs(Math.cos(multiplier + Math.PI / 5))))
+                            );
+                            synchronized (g) {
+                                g.setColor(color);
+                                g.fillRect(i, j, 1, 1);
+                            }
+                        }
+                    }
+                };
+                threads.add(new Thread(task));
+                threads.getLast().start();
+            }
             for (Thread thread : threads) {
                 thread.join();
             }
-        } catch (
-                InterruptedException e) {
+        } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-
-//        System.out.println(threads.toArray().length);
     }
 
     public Converter getConverter() {
