@@ -20,10 +20,10 @@ public class FractalPainter implements Painter {
     @Override
     public void paint(Graphics g) {
         ArrayList<Thread> threads = new ArrayList<>();
-        for (int i = 0; i < converter.getWidth(); i++) {
+        for (int i = 0; i <= converter.getWidth(); i++) {
             int iCopy = i;
             Runnable task = () -> {
-                for (int j = 0; j < converter.getHeight(); j++) {
+                for (int j = 0; j <= converter.getHeight(); j++) {
                     var x = converter.xScreenToCartesian(iCopy);
                     var y = converter.yScreenToCartesian(j);
 //                var color = mandelbrot.isInSet(new ComplexNumber.Base(x, y)) ? Color.BLACK : Color.WHITE;
@@ -90,8 +90,9 @@ public class FractalPainter implements Painter {
         converter.setYShape(yMin, yMax);
         this.degree = Math.min(6, -((int) (Math.log10(xMax - xMin))));
         mandelbrot.setMaxIter((int) (200 * Math.pow(2, this.degree)));
-//        System.out.println(mandelbrot.getMaxIter());
+        System.out.println(mandelbrot.getMaxIter());
     }
+
 
     @Override
     public int getWidth() {
@@ -103,7 +104,6 @@ public class FractalPainter implements Painter {
         converter.setWidth(width);
 
     }
-
 
     @Override
     public int getHeight() {
