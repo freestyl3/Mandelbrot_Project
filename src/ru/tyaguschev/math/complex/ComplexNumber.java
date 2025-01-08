@@ -4,6 +4,7 @@ public interface ComplexNumber {
     Double realValue();
     Double imaginaryValue();
     Double abs();
+    Double abs2();
     ComplexNumber times(ComplexNumber other);
     ComplexNumber plus(ComplexNumber other);
     ComplexNumber minus(ComplexNumber complex);
@@ -52,9 +53,10 @@ public interface ComplexNumber {
         }
 
         @Override
-        public Double abs() {
-            return Math.sqrt(Math.pow(this.real, 2) + Math.pow(this.imaginary, 2));
-        }
+        public Double abs() { return Math.sqrt(this.real * this.real + this.imaginary * this.imaginary); }
+
+        @Override
+        public Double abs2() { return this.real * this.real + this.imaginary * this.imaginary; }
 
         @Override
         public ComplexNumber pow(Integer number) {
