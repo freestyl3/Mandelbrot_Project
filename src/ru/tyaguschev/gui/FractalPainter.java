@@ -72,48 +72,27 @@ public class FractalPainter implements Painter {
         return this.converter;
     }
 
-    public void updateCoordinates(double xMin, double xMax, double yMin, double yMax) {
-//        var coordinates = saveAspectRatio(xMin, xMax, yMin, yMax);
-//        System.out.println(ratio);
+    public ArrayList<Double> updateCoordinates(double xMin, double xMax, double yMin, double yMax) {
         var deltaX = Math.abs(xMax - xMin);
         var deltaY = Math.abs(yMax - yMin) * this.ratio;
         var delta = Math.abs(deltaX - deltaY) / 2;
         if (deltaX > deltaY) {
-//            var delta = (Math.abs(xMax - xMin) - Math.abs(yMin - yMax)) / 2;
-            yMin += delta;
-            yMax -= delta;
-//            yMin /= ratio;
-//            yMax /= ratio;
-        } else {
-//            var delta = (Math.abs(yMin - yMax) - Math.abs(xMax - xMin)) / 2;
+            yMin += delta / this.ratio;
+            yMax -= delta / this.ratio;
+        } else if (deltaX < deltaY) {
             xMin -= delta;
             xMax += delta;
-//            xMin *= ratio;
-//            xMax *= ratio;
         }
         converter.setXShape(xMin, xMax);
         converter.setYShape(yMin, yMax);
         this.degree = Math.min(6, -((int) (Math.log10(xMax - xMin))));
         mandelbrot.setMaxIter((int) (200 * Math.pow(2, this.degree)));
-//        System.out.println(mandelbrot.getMaxIter());
+        return new ArrayList<>(List.of(xMin, xMax, yMax, yMin));
     }
 
-    public void updateRatio(double ratio) {
+    public void saveAspectRatio(double xMin, double xMax, double yMin, double yMax, double ratio) {
         this.ratio = ratio;
-    }
-
-    public void saveAspectRatio(double xMin, double xMax, double yMin, double yMax) {
-        var deltaX = Math.abs(xMax - xMin);
-        var deltaY = Math.abs(yMax - yMin) * ratio;
-        if (deltaX > deltaY) {
-            yMin /= ratio;
-            yMax /= ratio;
-        } else {
-            xMin *= ratio;
-            xMax *= ratio;
-        }
-        converter.setXShape(xMin, xMax);
-        converter.setYShape(yMin, yMax);
+        updateCoordinates(xMin, xMax, yMin, yMax);
     }
 
 
