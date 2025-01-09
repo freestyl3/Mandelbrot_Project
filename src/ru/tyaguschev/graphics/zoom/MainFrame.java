@@ -103,32 +103,19 @@ public class MainFrame extends JFrame {
                 var width = mainPanel.getWidth();
                 var height = mainPanel.getHeight();
                 ratio = (double) width / (double) height;
+
                 selector.setGraphics(mainPanel.getGraphics());
                 selector.updateCoordinates(width, height);
-
-//                Converter converter = fPainter.getConverter();
-
 
                 var curCords = coordinates.getLast();
                 var xMin = curCords.get(0);
                 var xMax = curCords.get(1);
                 var yMax = curCords.get(2);
                 var yMin = curCords.get(3);
-
-//                System.out.println(ratio);
-//                System.out.println(fPainter.getConverter().getYMax());
-//                System.out.println();
                 fPainter.saveAspectRatio(xMin, xMax, yMin, yMax, ratio);
 
                 fPainter.setWidth(width);
                 fPainter.setHeight(height);
-
-                xMin = fPainter.getConverter().getXMin();
-                xMax = fPainter.getConverter().getXMax();
-                yMin = fPainter.getConverter().getYMin();
-                yMax = fPainter.getConverter().getYMax();
-                System.out.println(xMin + ", " + yMin + ", " + xMax + ", " + yMax + ", " + width + ", " + height);
-//                System.out.println(fPainter.getConverter().getYMin());
             }
         });
 
@@ -150,15 +137,10 @@ public class MainFrame extends JFrame {
                     var yMin = converter.yScreenToCartesian(rect.getStartPoint().y);
                     var xMax = converter.xScreenToCartesian(rect.getStartPoint().x + rect.getWidth());
                     var yMax = converter.yScreenToCartesian(rect.getStartPoint().y + rect.getHeigth());
-                    var newCoordinates = new ArrayList<>(List.of(xMin, xMax, yMax / ratio, yMin / ratio));
+                    var newCoordinates = new ArrayList<>(List.of(xMin, xMax, yMax, yMin));
                     if (!newCoordinates.equals(coordinates.getLast()))
-                      coordinates.add(newCoordinates);
-//                        coordinates.add(fPainter.updateCoordinates(xMin, xMax, yMin, yMax));
-                    printCoordinates();
-
-//                    System.out.println(xMin + ", " + yMin + ", " + xMax + ", " + yMax);
-
-
+                        coordinates.add(fPainter.updateCoordinates(xMin, xMax, yMin, yMax));
+//                    printCoordinates();
                     mainPanel.repaint();
                 }
                 selector.clearSelection();
@@ -233,13 +215,11 @@ public class MainFrame extends JFrame {
         if (coordinates.size() > 1)
             this.coordinates.removeLast();
         var lastCoordinates = this.coordinates.getLast();
-//        System.out.println(lastCoordinates);
         var xMin = lastCoordinates.get(0);
         var xMax = lastCoordinates.get(1);
-        var yMax = lastCoordinates.get(2) / this.ratio;
-        var yMin = lastCoordinates.get(3) / this.ratio;
-//        fPainter.saveAspectRatio(xMin, xMax, yMin, yMax, this.ratio);
-        fPainter.updateCoordinates(xMin, xMax, yMin, yMax);
+        var yMax = lastCoordinates.get(2);
+        var yMin = lastCoordinates.get(3);
+        fPainter.saveAspectRatio(xMin, xMax, yMin, yMax, this.ratio);
         mainPanel.repaint();
     }
 
@@ -251,13 +231,11 @@ public class MainFrame extends JFrame {
 //        System.out.println(lastCoordinates);
             var xMin = curCoordinates.get(0);
             var xMax = curCoordinates.get(1);
-            var yMax = curCoordinates.get(2) / this.ratio;
-            var yMin = curCoordinates.get(3) / this.ratio;
-//        fPainter.saveAspectRatio(xMin, xMax, yMin, yMax, this.ratio);
-            fPainter.updateCoordinates(xMin, xMax, yMin, yMax);
-            System.out.println(xMin + ", " + xMax + ", " + yMin + ", " + yMax + ", " + i);
+            var yMax = curCoordinates.get(2);
+            var yMin = curCoordinates.get(3);
+            fPainter.saveAspectRatio(xMin, xMax, yMin, yMax, this.ratio);
             mainPanel.repaint();
-            TimeUnit.MILLISECONDS.sleep(1000);
+//            TimeUnit.MILLISECONDS.sleep(1000);
 //            var image = getScreenShot();
 //            saveImage(fileName + i + ".jpg");
         }
@@ -301,7 +279,7 @@ public class MainFrame extends JFrame {
         }
         var lastCords = this.coordinates.getLast();
         System.out.println(lastCords);
-        System.out.println((lastCords.get(1) - lastCords.get(0)) + ", " + (lastCords.get(2) - lastCords.get(3)) + ", " + this.ratio);
+//        System.out.println((lastCords.get(1) - lastCords.get(0)) + ", " + (lastCords.get(2) - lastCords.get(3)) + ", " + this.ratio);
     }
 
     private void keyBindings() {
