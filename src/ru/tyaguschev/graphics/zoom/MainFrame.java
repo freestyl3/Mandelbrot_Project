@@ -118,24 +118,16 @@ public class MainFrame extends JFrame {
 //                System.out.println(ratio);
 //                System.out.println(fPainter.getConverter().getYMax());
 //                System.out.println();
-
-
-//                coordinates.removeLast();
-//                xMin = fPainter.getConverter().getXMin();
-//                xMax = fPainter.getConverter().getXMax();
-//                yMin = fPainter.getConverter().getYMin();
-//                yMax = fPainter.getConverter().getYMax();
-
-//                coordinates.add(new ArrayList<>(List.of(xMin, xMax, yMin, yMax)));
-//                fPainter.updateCoordinates(xMin, xMax, yMin, yMax, ratio);
-
-//                fPainter.saveAspectRatio(xMin, xMax, yMin, yMax, ratio);
-                fPainter.updateCoordinates(xMin, xMax, yMin, yMax);
-
-//                printCoordinates();
+                fPainter.saveAspectRatio(xMin, xMax, yMin, yMax, ratio);
 
                 fPainter.setWidth(width);
                 fPainter.setHeight(height);
+
+                xMin = fPainter.getConverter().getXMin();
+                xMax = fPainter.getConverter().getXMax();
+                yMin = fPainter.getConverter().getYMin();
+                yMax = fPainter.getConverter().getYMax();
+                System.out.println(xMin + ", " + yMin + ", " + xMax + ", " + yMax + ", " + width + ", " + height);
 //                System.out.println(fPainter.getConverter().getYMin());
             }
         });
@@ -160,9 +152,10 @@ public class MainFrame extends JFrame {
                     var yMax = converter.yScreenToCartesian(rect.getStartPoint().y + rect.getHeigth());
                     var newCoordinates = new ArrayList<>(List.of(xMin, xMax, yMax / ratio, yMin / ratio));
                     if (!newCoordinates.equals(coordinates.getLast()))
-                        coordinates.add(fPainter.updateCoordinates(xMin, xMax, yMin, yMax));
+                      coordinates.add(newCoordinates);
+//                        coordinates.add(fPainter.updateCoordinates(xMin, xMax, yMin, yMax));
+                    printCoordinates();
 
-//                    printCoordinates();
 //                    System.out.println(xMin + ", " + yMin + ", " + xMax + ", " + yMax);
 
 
