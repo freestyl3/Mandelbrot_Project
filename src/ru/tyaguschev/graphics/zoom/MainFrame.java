@@ -105,22 +105,15 @@ public class MainFrame extends JFrame {
 //                System.out.println(fPainter.getConverter().getYMax());
 //                System.out.println();
 
-
-//                coordinates.removeLast();
-//                xMin = fPainter.getConverter().getXMin();
-//                xMax = fPainter.getConverter().getXMax();
-//                yMin = fPainter.getConverter().getYMin();
-//                yMax = fPainter.getConverter().getYMax();
-
-//                coordinates.add(new ArrayList<>(List.of(xMin, xMax, yMin, yMax)));
-//                fPainter.updateCoordinates(xMin, xMax, yMin, yMax, ratio);
-                fPainter.updateRatio(ratio);
-                fPainter.saveAspectRatio(xMin, xMax, yMin, yMax);
-
-//                fPainter.updateCoordinates(xMin, xMax, yMin, yMax);
-
+                fPainter.saveAspectRatio(xMin, xMax, yMin, yMax, ratio);
                 fPainter.setWidth(width);
                 fPainter.setHeight(height);
+
+                xMin = fPainter.getConverter().getXMin();
+                xMax = fPainter.getConverter().getXMax();
+                yMin = fPainter.getConverter().getYMin();
+                yMax = fPainter.getConverter().getYMax();
+                System.out.println(xMin + ", " + yMin + ", " + xMax + ", " + yMax + ", " + width + ", " + height);
 //                System.out.println(fPainter.getConverter().getYMin());
             }
         });

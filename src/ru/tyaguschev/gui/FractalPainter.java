@@ -80,8 +80,8 @@ public class FractalPainter implements Painter {
         var delta = Math.abs(deltaX - deltaY) / 2;
         if (deltaX > deltaY) {
 //            var delta = (Math.abs(xMax - xMin) - Math.abs(yMin - yMax)) / 2;
-            yMin += delta / ratio;
-            yMax -= delta / ratio;
+            yMin += delta / this.ratio;
+            yMax -= delta / this.ratio;
 //            yMin /= ratio;
 //            yMax /= ratio;
         } else {
@@ -98,23 +98,16 @@ public class FractalPainter implements Painter {
 //        System.out.println(mandelbrot.getMaxIter());
     }
 
-    public void updateRatio(double ratio) {
+    public void saveAspectRatio(double xMin, double xMax, double yMin, double yMax, double ratio) {
         this.ratio = ratio;
-    }
-
-    public void saveAspectRatio(double xMin, double xMax, double yMin, double yMax) {
-//        var deltaX = Math.abs(xMax - xMin);
-//        var deltaY = Math.abs(yMax - yMin);
-        if (ratio > 1) {
-            xMin *= ratio;
-            xMax *= ratio;
-        } else {
-            yMin *= ratio;
-            yMax *= ratio;
-        }
+//        if (ratio > 1) {
+//            xMin *= ratio;
+////            xMax *= ratio;
+//        } else if (ratio < 1) {
+//            yMin *= ratio;
+////            yMax *= ratio;
+//        }
         updateCoordinates(xMin, xMax, yMin, yMax);
-//        converter.setXShape(xMin, xMax);
-//        converter.setYShape(yMin, yMax);
     }
 
 
