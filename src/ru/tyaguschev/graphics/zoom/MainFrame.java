@@ -101,9 +101,9 @@ public class MainFrame extends JFrame {
                 var yMax = curCords.get(2);
                 var yMin = curCords.get(3);
 
-                System.out.println(ratio);
-                System.out.println(fPainter.getConverter().getYMax());
-                System.out.println();
+//                System.out.println(ratio);
+//                System.out.println(fPainter.getConverter().getYMax());
+//                System.out.println();
 
 
 //                coordinates.removeLast();
@@ -114,10 +114,10 @@ public class MainFrame extends JFrame {
 
 //                coordinates.add(new ArrayList<>(List.of(xMin, xMax, yMin, yMax)));
 //                fPainter.updateCoordinates(xMin, xMax, yMin, yMax, ratio);
-
-                fPainter.saveAspectRatio(xMin, xMax, yMin, yMax);
                 fPainter.updateRatio(ratio);
-                fPainter.updateCoordinates(xMin, xMax, yMin, yMax);
+                fPainter.saveAspectRatio(xMin, xMax, yMin, yMax);
+
+//                fPainter.updateCoordinates(xMin, xMax, yMin, yMax);
 
                 fPainter.setWidth(width);
                 fPainter.setHeight(height);
@@ -146,7 +146,7 @@ public class MainFrame extends JFrame {
                     var newCoordinates = new ArrayList<>(List.of(xMin, xMax, yMax * ratio, yMin * ratio));
                     if (!newCoordinates.equals(coordinates.getLast()))
                         coordinates.add(newCoordinates);
-//                    printCoordinates();
+                    printCoordinates();
 //                    System.out.println(xMin + ", " + yMin + ", " + xMax + ", " + yMax);
                     fPainter.updateCoordinates(xMin, xMax, yMin, yMax);
                     mainPanel.repaint();
