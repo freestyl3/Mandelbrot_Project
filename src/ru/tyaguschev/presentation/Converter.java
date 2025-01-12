@@ -1,4 +1,4 @@
-package ru.tyaguschev.math.converter;
+package ru.tyaguschev.presentation;
 
 import static java.lang.Math.abs;
 

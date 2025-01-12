@@ -1,8 +1,8 @@
-package ru.tyaguschev.graphics.zoom;
+package ru.tyaguschev.presentation.zoom;
 
-import ru.tyaguschev.gui.FractalPainter;
-import ru.tyaguschev.gui.Rect;
-import ru.tyaguschev.math.converter.Converter;
+import ru.tyaguschev.presentation.gui.FractalPainter;
+import ru.tyaguschev.presentation.gui.Rect;
+import ru.tyaguschev.presentation.Converter;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import java.util.concurrent.TimeUnit;
 
 public class MainFrame extends JFrame {
     private final int WIDTH = 617;

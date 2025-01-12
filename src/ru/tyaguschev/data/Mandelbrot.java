@@ -1,9 +1,7 @@
-package ru.tyaguschev.fractals;
-
-import ru.tyaguschev.math.complex.ComplexNumber;
+package ru.tyaguschev.data;
 
 public class Mandelbrot {
-    private int maxIter = 200;
+    private int maxIter = 2000;
 
     public double isInSet(ComplexNumber complex) {
         ComplexNumber z = new ComplexNumber.Base();
@@ -13,16 +11,12 @@ public class Mandelbrot {
             z = z.times(z).plus(complex);
             i++;
         }
-//        double coeff = (double) i / maxIter;
-//        if (coeff > 0.5)
-//            return 1;
-//        else
-//            return coeff;
         return (double) i / maxIter;
-//        return z.abs();
     }
 
     public void setMaxIter(int iters) {
+        if (iters >= 13000)
+            iters = 13000;
         this.maxIter = iters;
     }
 

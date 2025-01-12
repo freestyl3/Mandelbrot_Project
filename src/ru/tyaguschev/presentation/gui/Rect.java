@@ -1,4 +1,4 @@
-package ru.tyaguschev.gui;
+package ru.tyaguschev.presentation.gui;
 
 import java.awt.*;
 

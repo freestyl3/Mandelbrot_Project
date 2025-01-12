@@ -1,4 +1,4 @@
-package ru.tyaguschev.math.complex;
+package ru.tyaguschev.data;
 
 public interface ComplexNumber {
     Double realValue();

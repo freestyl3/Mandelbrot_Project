@@ -1,6 +1,6 @@
-package ru.tyaguschev.graphics.zoom;
+package ru.tyaguschev.presentation.zoom;
 
-import ru.tyaguschev.gui.Rect;
+import ru.tyaguschev.presentation.gui.Rect;
 
 import java.awt.*;
 
@@ -13,8 +13,8 @@ public class AreaSelector {
     private Graphics mainGraphics;
     private Color color;
 
-    public AreaSelector(int maxWidth, int maxHeigth) {
-        this.rect = new Rect(maxWidth, maxHeigth);
+    public AreaSelector(int maxWidth, int maxHeight) {
+        this.rect = new Rect(maxWidth, maxHeight);
     }
 
     /**

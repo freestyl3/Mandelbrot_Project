@@ -1,8 +1,8 @@
-package ru.tyaguschev.gui;
+package ru.tyaguschev.presentation.gui;
 
-import ru.tyaguschev.fractals.Mandelbrot;
-import ru.tyaguschev.math.complex.ComplexNumber;
-import ru.tyaguschev.math.converter.Converter;
+import ru.tyaguschev.data.Mandelbrot;
+import ru.tyaguschev.data.ComplexNumber;
+import ru.tyaguschev.presentation.Converter;
 
 import java.awt.*;
 import java.util.ArrayList;
