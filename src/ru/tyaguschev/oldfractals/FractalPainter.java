@@ -1,8 +1,7 @@
-package ru.tyaguschev.presentation.gui;
+package ru.tyaguschev.oldfractals;
 
 import ru.tyaguschev.data.Mandelbrot;
 import ru.tyaguschev.data.ComplexNumber;
-import ru.tyaguschev.presentation.Converter;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -86,7 +85,7 @@ public class FractalPainter implements Painter {
         converter.setXShape(xMin, xMax);
         converter.setYShape(yMin, yMax);
         this.degree = Math.min(6, -((int) (Math.log10(xMax - xMin))));
-        mandelbrot.setMaxIter((int) (200 * Math.pow(2, this.degree)));
+        mandelbrot.setMaxIterations((int) (200 * Math.pow(2, this.degree)));
         return new ArrayList<>(List.of(xMin, xMax, yMax, yMin));
     }
 

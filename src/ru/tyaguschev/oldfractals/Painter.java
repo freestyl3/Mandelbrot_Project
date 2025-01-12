@@ -1,4 +1,4 @@
-package ru.tyaguschev.presentation.gui;
+package ru.tyaguschev.oldfractals;
 
 import java.awt.*;
 

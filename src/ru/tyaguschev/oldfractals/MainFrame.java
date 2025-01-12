@@ -1,8 +1,7 @@
-package ru.tyaguschev.presentation.zoom;
+package ru.tyaguschev.oldfractals;
 
-import ru.tyaguschev.presentation.gui.FractalPainter;
-import ru.tyaguschev.presentation.gui.Rect;
-import ru.tyaguschev.presentation.Converter;
+import ru.tyaguschev.presentation.Rect;
+import ru.tyaguschev.presentation.AreaSelector;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -135,7 +134,7 @@ public class MainFrame extends JFrame {
                     var xMin = converter.xScreenToCartesian(rect.getStartPoint().x);
                     var yMin = converter.yScreenToCartesian(rect.getStartPoint().y);
                     var xMax = converter.xScreenToCartesian(rect.getStartPoint().x + rect.getWidth());
-                    var yMax = converter.yScreenToCartesian(rect.getStartPoint().y + rect.getHeigth());
+                    var yMax = converter.yScreenToCartesian(rect.getStartPoint().y + rect.getHeight());
                     var newCoordinates = new ArrayList<>(List.of(xMin, xMax, yMax, yMin));
                     if (!newCoordinates.equals(coordinates.getLast()))
                         coordinates.add(fPainter.updateCoordinates(xMin, xMax, yMin, yMax));

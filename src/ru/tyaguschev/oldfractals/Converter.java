@@ -1,4 +1,4 @@
-package ru.tyaguschev.presentation;
+package ru.tyaguschev.oldfractals;
 
 import static java.lang.Math.abs;
 

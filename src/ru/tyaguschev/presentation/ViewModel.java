@@ -2,7 +2,6 @@ package ru.tyaguschev.presentation;
 
 import kotlin.Pair;
 import ru.tyaguschev.data.Repository;
-import ru.tyaguschev.presentation.gui.Rect;
 
 import java.awt.image.BufferedImage;
 import java.util.Stack;
@@ -69,7 +68,7 @@ public class ViewModel extends BackStack.Abstract {
             Integer windowWidth,
             Rect rect
     ) {
-        var height = rect.getHeigth();
+        var height = rect.getHeight();
         var width = rect.getWidth();
         var xCentre = -windowWidth / 2 + width / 2 + rect.getStartPoint().x;
         var yCentre = -windowHeight / 2 + height / 2 + rect.getStartPoint().y;
@@ -92,6 +91,7 @@ public class ViewModel extends BackStack.Abstract {
         this.currentCentre = lastState.getSecond();
         print(windowHeight, windowWidth);
     }
+
 }
 
 interface ImageCallback {

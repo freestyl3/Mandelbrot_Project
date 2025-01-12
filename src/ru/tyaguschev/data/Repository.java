@@ -6,8 +6,6 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-import static java.lang.Math.sqrt;
-
 public interface Repository {
     BufferedImage createImage(ScreenConverter converter);
 
@@ -17,8 +15,8 @@ public interface Repository {
         @Override
         public BufferedImage createImage(ScreenConverter converter) {
             try {
-                mandelbrot.setMaxIter((int) (50 / Math.sqrt(Math.sqrt(converter.scale))));
-                System.out.println(mandelbrot.getMaxIter());
+                mandelbrot.setMaxIterations((int) (100 / Math.sqrt(Math.sqrt(Math.sqrt(converter.scale)))));
+                System.out.println(mandelbrot.getMaxIterations());
                 ArrayList<Thread> threads = new ArrayList<>();
 
                 int numThreads = 20;
@@ -27,13 +25,13 @@ public interface Repository {
                 int height = converter.height;
 
                 BufferedImage image = new BufferedImage(width + 1, height + 1, BufferedImage.TYPE_INT_RGB);
-                final Object sync = new Object(); // Инициализация синхронизации
+                final Object sync = new Object();
 
-                int segmentWidth = (int) Math.ceil((double) width / numThreads); // Корректное разделение на сегменты
+                int segmentWidth = (int) Math.ceil((double) width / numThreads);
 
                 for (int t = 0; t < numThreads; t++) {
                     int startX = t * segmentWidth;
-                    int endX = Math.min(width, (t + 1) * segmentWidth); // Убедиться, что последний сегмент корректный
+                    int endX = Math.min(width, (t + 1) * segmentWidth);
 
                     Runnable task = () -> {
                         for (int i = startX; i < endX; i++) {
@@ -60,7 +58,7 @@ public interface Repository {
                 }
 
                 for (Thread thread : threads) {
-                    thread.join(); // Ожидание завершения потоков
+                    thread.join();
                 }
 
                 return image;

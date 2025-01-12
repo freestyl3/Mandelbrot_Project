@@ -1,6 +1,6 @@
-package ru.tyaguschev.presentation.gui;
+package ru.tyaguschev.presentation;
 
-import java.awt.*;
+import java.awt.Point;
 
 /**
  * Класс для построения прямоугольной области по двум заданным точкам
@@ -9,12 +9,12 @@ public class Rect {
     /**
      * Первая установленная точка для формирования прямоугольной области
      */
-    private Point point1 = null;
+    private java.awt.Point point1 = null;
 
     /**
      * Вторая установленная точка для формирования прямоугольной области
      */
-    private Point point2 = null;
+    private java.awt.Point point2 = null;
     private final int maxWidth;
     private final int maxHeight;
 
@@ -25,7 +25,7 @@ public class Rect {
 
     /**
      * Проверка возможности построения прямоугольника
-     * @return true, если заданы обе точки и прямоугльник может быть построен;
+     * @return true, если заданы обе точки и прямоугольник может быть построен;
      * false - если хотя бы одна из точек, необходимых для построения прямоугольника не задана
      */
     public boolean isValid(){
@@ -41,7 +41,7 @@ public class Rect {
      * @param point точка, координаты которой будут добавлены в прямоугольную область
      * @see #clearPoints()
      */
-    public void addPoint(Point point) {
+    public void addPoint(java.awt.Point point) {
         if (point1 != null) {
             point2 = point;
             point2.x = Math.max(0, Math.min(point.x, this.maxWidth));
@@ -57,8 +57,8 @@ public class Rect {
      * Получение стартовой (левой верхней) точки прямоугольной области
      * @return Левая верхняя точка прямоугольной области
      */
-    public Point getStartPoint(){
-        return isValid() ? new Point(
+    public java.awt.Point getStartPoint(){
+        return isValid() ? new java.awt.Point(
                 Math.max(0, Math.min(point1.x,point2.x)),
                 Math.max(0, Math.min(point1.y,point2.y))) : null;
     }
@@ -75,7 +75,7 @@ public class Rect {
      * Получение высоты прямоугольной области
      * @return высота прямоугольника
      */
-    public int getHeigth(){
+    public int getHeight(){
         return isValid() ? Math.abs(point1.y-point2.y) : 0;
     }
 

@@ -1,8 +1,6 @@
 package ru.tyaguschev.presentation;
 
 import ru.tyaguschev.data.Repository;
-import ru.tyaguschev.presentation.gui.Rect;
-import ru.tyaguschev.presentation.zoom.AreaSelector;
 
 import javax.swing.*;
 import java.awt.*;

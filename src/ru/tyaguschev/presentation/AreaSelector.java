@@ -1,8 +1,7 @@
-package ru.tyaguschev.presentation.zoom;
-
-import ru.tyaguschev.presentation.gui.Rect;
+package ru.tyaguschev.presentation;
 
 import java.awt.*;
+import java.awt.Point;
 
 /**
  * Класс для отображения прямоугольной области, очерчивающей границы
@@ -75,7 +74,7 @@ public class AreaSelector {
                     startPoint.x,
                     startPoint.y,
                     rect.getWidth(),
-                    rect.getHeigth()
+                    rect.getHeight()
             );
             mainGraphics.setPaintMode();
         }
@@ -102,8 +101,8 @@ public class AreaSelector {
         return rect.getStartPoint() != null ? this.rect : null;
     }
 
-    public void updateCoordinates(int maxWidth, int maxHeigth) {
-        this.rect = new Rect(maxWidth, maxHeigth);
+    public void updateCoordinates(int maxWidth, int maxHeight) {
+        this.rect = new Rect(maxWidth, maxHeight);
     }
 
 }

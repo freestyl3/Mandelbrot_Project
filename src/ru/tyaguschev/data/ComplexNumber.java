@@ -47,9 +47,9 @@ public interface ComplexNumber {
         @Override
         public ComplexNumber divide(ComplexNumber other) {
             double denominator = Math.pow(other.realValue(), 2) + Math.pow(other.imaginaryValue(), 2);
-            double realNumenator = this.real * other.realValue() + this.imaginary * other.imaginaryValue();
-            double imaginaryNumenator = this.imaginary * other.realValue() - this.real * other.imaginaryValue();
-            return new Base(realNumenator / denominator, imaginaryNumenator / denominator);
+            double realNumerator = this.real * other.realValue() + this.imaginary * other.imaginaryValue();
+            double imaginaryNumerator = this.imaginary * other.realValue() - this.real * other.imaginaryValue();
+            return new Base(realNumerator / denominator, imaginaryNumerator / denominator);
         }
 
         @Override
