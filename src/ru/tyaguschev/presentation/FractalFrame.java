@@ -49,7 +49,9 @@ public class FractalFrame extends JFrame {
 
         JMenuItem undo = new JMenuItem("Undo");
         actionsMenu.add(undo);
-        undo.addActionListener(_-> viewModel.goBack(panel.getHeight(), panel.getWidth()));
+        undo.addActionListener(_ -> viewModel.goBack(panel.getHeight(), panel.getWidth()));
+
+        add(panel);
 
         panel.addMouseListener(new MouseAdapter() {
             @Override
@@ -67,7 +69,6 @@ public class FractalFrame extends JFrame {
             }
         });
 
-        add(panel);
 
         selector.setColor(Color.BLUE);
 
@@ -119,7 +120,17 @@ public class FractalFrame extends JFrame {
             }
         });
 
+        panel.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                super.componentResized(e);
 
+                if (innerImage.getHeight() <= panel.getHeight() ||
+                        innerImage.getWidth() <= panel.getWidth())
+                    viewModel.print(panel.getHeight(), panel.getWidth());
+
+            }
+        });
         setVisible(true);
 
         viewModel.init(

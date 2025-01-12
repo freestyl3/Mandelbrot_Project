@@ -51,17 +51,17 @@ public class ViewModel extends BackStack.Abstract {
     }
 
     void move(
-            Integer height,
-            Integer width,
+            Integer windowHeight,
+            Integer windowWidth,
             Point newCentre
     ) {
-        var centreX = width / 2;
-        var centreY = height / 2;
+        var centreX = windowWidth / 2;
+        var centreY = windowHeight / 2;
         currentCentre = new Point(
                 (newCentre.x() - centreX) * scale + currentCentre.x(),
                 (newCentre.y() - centreY) * scale + currentCentre.y()
         );
-        print(height, width);
+        print(windowHeight, windowWidth);
     }
 
     void zoom(
@@ -119,5 +119,4 @@ interface BackStack {
             stack.pop();
         }
     }
-
 }
