@@ -53,10 +53,11 @@ public interface ComplexNumber {
         }
 
         @Override
-        public Double abs() { return Math.sqrt(this.real * this.real + this.imaginary * this.imaginary); }
+        public Double abs() {
+            return Math.sqrt(Math.pow(this.real, 2) + Math.pow(this.imaginary, 2));
+        }
 
-        @Override
-        public Double abs2() { return this.real * this.real + this.imaginary * this.imaginary; }
+        public Double abs2() {return Math.pow(this.real, 2) + Math.pow(this.imaginary, 2);}
 
         @Override
         public ComplexNumber pow(Integer number) {

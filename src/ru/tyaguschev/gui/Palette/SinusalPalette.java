@@ -14,9 +14,9 @@ public class SinusalPalette implements ColorPalette{
     @Override
     public Color getColor(double multiplier) {
         return new Color(
-                (int) (this.red * multiplier * (Math.abs(Math.sin(multiplier + Math.PI / 2)))),
-                (int) (this.green * multiplier * (Math.abs(Math.sin(multiplier + Math.PI / 3)))),
-                (int) (this.blue * multiplier * (Math.abs(Math.sin(multiplier + Math.PI / 5))))
+                (int) (255 * multiplier * (Math.abs(Math.sin(multiplier + Math.PI / this.red)))),
+                (int) (255 * multiplier * (Math.abs(Math.sin(multiplier + Math.PI / this.green)))),
+                (int) (255 * multiplier * (Math.abs(Math.sin(multiplier + Math.PI / this.blue))))
         );
     }
 }
