@@ -21,17 +21,31 @@ import java.util.Scanner;
 public class MainFrame extends JFrame {
     private final int WIDTH = 617;
     private final int HEIGHT = 663;
+    private BufferedImage image;
     private final FractalPainter fPainter = new FractalPainter(-2.0, 1.0, -1.5, 1.5,
             new CosinusalPalette(255, 255, 255));
     private final JPanel mainPanel = new JPanel() {
         @Override
-        public void paint(Graphics g) {
-            fPainter.paint(g);
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            if (image != null) {
+                int windowWidth = getWidth();
+                int windowHeight = getHeight();
+
+                int imageWidth = image.getWidth();
+                int imageHeight = image.getHeight();
+
+                int x = (windowWidth - imageWidth) / 2;
+                int y = (windowHeight - imageHeight) / 2;
+
+                g.drawImage(image, x, y, this);
+            }
         }
     };
     private final AreaSelector selector = new AreaSelector(WIDTH - 16, HEIGHT - 62);
     private final ArrayList<ArrayList<Double>> coordinates= new ArrayList<>();
     private double ratio = 1.0;
+    private final ArrayList<BufferedImage> images = new ArrayList<>();
 
     public MainFrame() {
         this.coordinates.add(new ArrayList<>(List.of(-2.0, 1.0, -1.5, 1.5)));
@@ -62,6 +76,10 @@ public class MainFrame extends JFrame {
 
                 fPainter.setWidth(width);
                 fPainter.setHeight(height);
+
+                image = fPainter.createImage();
+                mainPanel.repaint();
+
             }
         });
 
@@ -85,6 +103,9 @@ public class MainFrame extends JFrame {
                 var newCoordinates = new ArrayList<>(List.of(xMin, xMax, yMax, yMin));
                 if (!newCoordinates.equals(coordinates.getLast()))
                     coordinates.add(fPainter.updateCoordinates(xMin, xMax, yMin, yMax));
+
+                image = fPainter.createImage();
+                images.add(image);
                 mainPanel.repaint();
             }
 
@@ -110,6 +131,8 @@ public class MainFrame extends JFrame {
                         coordinates.add(fPainter.updateCoordinates(xMin, xMax, yMin, yMax));
 //                    fPainter.updateCoordinates(xMin, xMax, yMin, yMax);
 //                    printCoordinates();
+                    image = fPainter.createImage();
+                    images.add(image);
                     mainPanel.repaint();
                 }
                 selector.clearSelection();
@@ -124,6 +147,9 @@ public class MainFrame extends JFrame {
                 selector.paint();
             }
         });
+        image = fPainter.createImage();
+        images.add(image);
+        mainPanel.repaint();
     }
 
     private BufferedImage getScreenShot() {
@@ -173,6 +199,8 @@ public class MainFrame extends JFrame {
             this.coordinates.add(newCords);
 //            printCoordinates();
             fPainter.updateCoordinates(xMin, xMax, yMin, yMax);
+            image = fPainter.createImage();
+
             mainPanel.repaint();
 //            System.out.println(newCords.size());
         } catch (IOException e) {
@@ -189,6 +217,10 @@ public class MainFrame extends JFrame {
         var yMax = lastCoordinates.get(2);
         var yMin = lastCoordinates.get(3);
         fPainter.saveAspectRatio(xMin, xMax, yMin, yMax, this.ratio);
+        image = fPainter.createImage();
+//        image = images.removeLast();
+        System.out.println(image);
+
         mainPanel.repaint();
     }
 
@@ -203,6 +235,8 @@ public class MainFrame extends JFrame {
             var yMax = curCoordinates.get(2);
             var yMin = curCoordinates.get(3);
             fPainter.saveAspectRatio(xMin, xMax, yMin, yMax, this.ratio);
+            image = fPainter.createImage();
+
             mainPanel.repaint();
 //            TimeUnit.MILLISECONDS.sleep(1000);
 //            var image = getScreenShot();
@@ -211,7 +245,7 @@ public class MainFrame extends JFrame {
     }
 
     private ArrayList<ArrayList<Double>> interpolateCoordinates(int steps) {
-        ArrayList<ArrayList<Double>> interpolated = new ArrayList<ArrayList<Double>>();
+        ArrayList<ArrayList<Double>> interpolated = new ArrayList<>();
         for (int i = 1; i < this.coordinates.size(); i++) {
             double xMinStep = (this.coordinates.get(i - 1).get(0) - this.coordinates.get(i).get(0)) / steps;
             double xMaxStep = (this.coordinates.get(i - 1).get(1) - this.coordinates.get(i).get(1)) / steps;
@@ -316,16 +350,22 @@ public class MainFrame extends JFrame {
         });
         cosPalette.addActionListener(_ -> {
             fPainter.setPalette(new CosinusalPalette(255, 255, 255));
+            image = fPainter.createImage();
+
             mainPanel.repaint();
         });
         sinPalette.addActionListener(_ -> {
             fPainter.setPalette(new SinusalPalette(255, 255, 255));
+            image = fPainter.createImage();
+
             mainPanel.repaint();
         });
 
 
         this.setJMenuBar(menuBar);
     }
+
+
 
     private void keyBindings() {
         String keyStrokeAndKey = "control z";
