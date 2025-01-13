@@ -1,6 +1,8 @@
 package ru.tyaguschev.graphics.zoom;
 
+import ru.tyaguschev.gui.Palette.CosinusalPalette;
 import ru.tyaguschev.gui.FractalPainter;
+import ru.tyaguschev.gui.Palette.SinusalPalette;
 import ru.tyaguschev.gui.Rect;
 import ru.tyaguschev.math.converter.Converter;
 
@@ -15,12 +17,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import java.util.concurrent.TimeUnit;
 
 public class MainFrame extends JFrame {
     private final int WIDTH = 617;
     private final int HEIGHT = 663;
-    private final FractalPainter fPainter = new FractalPainter(-2.0, 1.0, -1.5, 1.5);
+    private final FractalPainter fPainter = new FractalPainter(-2.0, 1.0, -1.5, 1.5,
+            new CosinusalPalette(255, 255, 255));
     private final JPanel mainPanel = new JPanel() {
         @Override
         public void paint(Graphics g) {
@@ -270,9 +272,17 @@ public class MainFrame extends JFrame {
         fileMenu.add(openFile);
 
         JMenuItem undo = new JMenuItem("Undo");
-        JMenuItem palette = new JMenuItem("Select palette");
+        JMenu palette = new JMenu("Select palette");
         actionsMenu.add(undo);
         actionsMenu.add(palette);
+
+        JMenuItem cosPalette = new JMenuItem("Cosinusal palette");
+        JMenuItem sinPalette = new JMenuItem("Sinusal palette");
+        JMenuItem linearPalette = new JMenuItem("Linear palette");
+
+        palette.add(cosPalette);
+        palette.add(sinPalette);
+        palette.add(linearPalette);
 
 
         saveAsImage.addActionListener(_ -> {
@@ -303,6 +313,14 @@ public class MainFrame extends JFrame {
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
+        });
+        cosPalette.addActionListener(_ -> {
+            fPainter.setPalette(new CosinusalPalette(255, 255, 255));
+            mainPanel.repaint();
+        });
+        sinPalette.addActionListener(_ -> {
+            fPainter.setPalette(new SinusalPalette(255, 255, 255));
+            mainPanel.repaint();
         });
 
 

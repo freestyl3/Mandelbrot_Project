@@ -1,6 +1,7 @@
 package ru.tyaguschev.gui;
 
 import ru.tyaguschev.fractals.Mandelbrot;
+import ru.tyaguschev.gui.Palette.ColorPalette;
 import ru.tyaguschev.math.complex.ComplexNumber;
 import ru.tyaguschev.math.converter.Converter;
 
@@ -13,10 +14,12 @@ public class FractalPainter implements Painter {
     private final Converter converter;
     private int degree;
     private double ratio = 1.0;
+    private ColorPalette palette;
 
-    public FractalPainter(double xMin, double xMax, double yMin, double yMax) {
+    public FractalPainter(double xMin, double xMax, double yMin, double yMax, ColorPalette palette) {
         this.converter = new Converter(xMin, xMax, yMin, yMax, 0, 0);
         this.degree = 0;
+        this.palette = palette;
     }
     private final ArrayList<Thread> threads = new ArrayList<>();
     @Override
@@ -45,11 +48,7 @@ public class FractalPainter implements Painter {
                             var x = converter.xScreenToCartesian(i);
                             var y = converter.yScreenToCartesian(j);
                             double multiplier = 1 - mandelbrot.isInSet(new ComplexNumber.Base(x, y));
-                            var color = new Color(
-                                    (int) (255 * multiplier * (Math.abs(Math.cos(multiplier + Math.PI / 2)))),
-                                    (int) (255 * multiplier * (Math.abs(Math.cos(multiplier + Math.PI / 3)))),
-                                    (int) (255 * multiplier * (Math.abs(Math.cos(multiplier + Math.PI / 5))))
-                            );
+                            var color = this.palette.getColor(multiplier);
 //                            var color = new Color(
 //                                        (int) (255 * multiplier),
 //                                        (int) (255 * multiplier),
@@ -98,6 +97,10 @@ public class FractalPainter implements Painter {
     public void saveAspectRatio(double xMin, double xMax, double yMin, double yMax, double ratio) {
         this.ratio = ratio;
         updateCoordinates(xMin, xMax, yMin, yMax);
+    }
+
+    public void setPalette(ColorPalette palette) {
+        this.palette = palette;
     }
 
 
