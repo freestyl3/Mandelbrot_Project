@@ -38,62 +38,6 @@ public class MainFrame extends JFrame {
         setMinimumSize(new Dimension(WIDTH, HEIGHT));
         add(mainPanel);
 
-        JMenuBar menuBar = new JMenuBar();
-        JMenu fileMenu = new JMenu("File");
-        JMenu actionsMenu = new JMenu("Actions");
-
-        menuBar.add(fileMenu);
-        menuBar.add(actionsMenu);
-
-        JMenu saveMenu = new JMenu("Save");
-        JMenuItem saveAsImage = new JMenuItem("As image");
-        JMenuItem saveAsFile = new JMenuItem("As file");
-        JMenuItem saveAsGif = new JMenuItem("As GIF");
-        JMenuItem openFile = new JMenuItem("Open file");
-
-        fileMenu.add(saveMenu);
-        saveMenu.add(saveAsImage);
-        saveMenu.add(saveAsFile);
-        saveMenu.add(saveAsGif);
-        fileMenu.add(openFile);
-
-        JMenuItem undo = new JMenuItem("Undo");
-        actionsMenu.add(undo);
-
-
-        saveAsImage.addActionListener(_ -> {
-            JFileChooser fileChooser = new JFileChooser();
-            fileChooser.showSaveDialog(null);
-            File file = fileChooser.getSelectedFile();
-            saveImage(file.getAbsolutePath());
-        });
-        saveAsFile.addActionListener(_ -> {
-            JFileChooser fileChooser = new JFileChooser();
-            fileChooser.showSaveDialog(null);
-            File file = fileChooser.getSelectedFile();
-            saveFile(file.getAbsolutePath());
-        });
-        openFile.addActionListener(_ -> {
-            JFileChooser fileChooser = new JFileChooser();
-            fileChooser.showOpenDialog(null);
-            File file = fileChooser.getSelectedFile();
-            openFile(file.getAbsolutePath());
-        });
-        undo.addActionListener(_ -> undo());
-        saveAsGif.addActionListener(_ -> {
-            JFileChooser fileChooser = new JFileChooser();
-            fileChooser.showSaveDialog(null);
-            File file = fileChooser.getSelectedFile();
-            try {
-                createGif(file.getAbsolutePath(), 50);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        });
-
-
-        this.setJMenuBar(menuBar);
-
         selector.setColor(Color.BLUE);
 
         mainPanel.addComponentListener(new ComponentAdapter() {
@@ -121,6 +65,28 @@ public class MainFrame extends JFrame {
 
         mainPanel.addMouseListener(new MouseAdapter() {
             @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                Converter converter = fPainter.getConverter();
+                Point center = new Point(e.getPoint());
+                var xCenter = converter.xScreenToCartesian(center.x);
+                var yCenter = converter.yScreenToCartesian(center.y);
+                var lastCords = coordinates.getLast();
+                var deltaX = Math.abs(lastCords.get(0) - lastCords.get(1)) / 2;
+                var deltaY = Math.abs(lastCords.get(2) - lastCords.get(3)) / 2;
+
+                var xMin = xCenter - deltaX;
+                var xMax = xCenter + deltaX;
+                var yMin = yCenter - deltaY;
+                var yMax = yCenter + deltaY;
+
+                var newCoordinates = new ArrayList<>(List.of(xMin, xMax, yMax, yMin));
+                if (!newCoordinates.equals(coordinates.getLast()))
+                    coordinates.add(fPainter.updateCoordinates(xMin, xMax, yMin, yMax));
+                mainPanel.repaint();
+            }
+
+            @Override
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
                 selector.addPoint(e.getPoint());
@@ -140,6 +106,7 @@ public class MainFrame extends JFrame {
                     var newCoordinates = new ArrayList<>(List.of(xMin, xMax, yMax, yMin));
                     if (!newCoordinates.equals(coordinates.getLast()))
                         coordinates.add(fPainter.updateCoordinates(xMin, xMax, yMin, yMax));
+//                    fPainter.updateCoordinates(xMin, xMax, yMin, yMax);
 //                    printCoordinates();
                     mainPanel.repaint();
                 }
@@ -280,6 +247,66 @@ public class MainFrame extends JFrame {
         var lastCords = this.coordinates.getLast();
         System.out.println(lastCords);
 //        System.out.println((lastCords.get(1) - lastCords.get(0)) + ", " + (lastCords.get(2) - lastCords.get(3)) + ", " + this.ratio);
+    }
+
+    public void setMenu() {
+        JMenuBar menuBar = new JMenuBar();
+        JMenu fileMenu = new JMenu("File");
+        JMenu actionsMenu = new JMenu("Actions");
+
+        menuBar.add(fileMenu);
+        menuBar.add(actionsMenu);
+
+        JMenu saveMenu = new JMenu("Save");
+        JMenuItem saveAsImage = new JMenuItem("As image");
+        JMenuItem saveAsFile = new JMenuItem("As file");
+        JMenuItem saveAsGif = new JMenuItem("As GIF");
+        JMenuItem openFile = new JMenuItem("Open file");
+
+        fileMenu.add(saveMenu);
+        saveMenu.add(saveAsImage);
+        saveMenu.add(saveAsFile);
+        saveMenu.add(saveAsGif);
+        fileMenu.add(openFile);
+
+        JMenuItem undo = new JMenuItem("Undo");
+        JMenuItem palette = new JMenuItem("Select palette");
+        actionsMenu.add(undo);
+        actionsMenu.add(palette);
+
+
+        saveAsImage.addActionListener(_ -> {
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.showSaveDialog(null);
+            File file = fileChooser.getSelectedFile();
+            saveImage(file.getAbsolutePath());
+        });
+        saveAsFile.addActionListener(_ -> {
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.showSaveDialog(null);
+            File file = fileChooser.getSelectedFile();
+            saveFile(file.getAbsolutePath());
+        });
+        openFile.addActionListener(_ -> {
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.showOpenDialog(null);
+            File file = fileChooser.getSelectedFile();
+            openFile(file.getAbsolutePath());
+        });
+        undo.addActionListener(_ -> undo());
+        saveAsGif.addActionListener(_ -> {
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.showSaveDialog(null);
+            File file = fileChooser.getSelectedFile();
+            try {
+                createGif(file.getAbsolutePath(), 50);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+
+        this.setJMenuBar(menuBar);
     }
 
     private void keyBindings() {

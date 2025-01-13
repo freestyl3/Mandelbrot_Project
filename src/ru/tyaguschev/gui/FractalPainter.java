@@ -50,6 +50,11 @@ public class FractalPainter implements Painter {
                                     (int) (255 * multiplier * (Math.abs(Math.cos(multiplier + Math.PI / 3)))),
                                     (int) (255 * multiplier * (Math.abs(Math.cos(multiplier + Math.PI / 5))))
                             );
+//                            var color = new Color(
+//                                        (int) (255 * multiplier),
+//                                        (int) (255 * multiplier),
+//                                        (int) (255 * multiplier)
+//                            );
                             synchronized (g) {
                                 g.setColor(color);
                                 g.fillRect(i, j, 1, 1);
