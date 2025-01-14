@@ -3,12 +3,11 @@ package ru.tyaguschev.presentation;
 import ru.tyaguschev.data.Repository;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
 
 public class FractalFrame extends JFrame {
     private final ViewModel viewModel = new ViewModel(new Repository.Base());
@@ -41,6 +40,57 @@ public class FractalFrame extends JFrame {
         menuBar.add(fileMenu);
         menuBar.add(actionsMenu);
 
+        JMenu saveMenu = new JMenu("Save");
+        JMenuItem saveAsImage = new JMenuItem("As image");
+        JMenuItem saveAsFile = new JMenuItem("As file");
+        JMenuItem openFile = new JMenuItem("Open file");
+
+        fileMenu.add(saveMenu);
+        saveMenu.add(saveAsImage);
+        saveMenu.add(saveAsFile);
+        fileMenu.add(openFile);
+        saveAsImage.addActionListener(_ -> {
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.showSaveDialog(null);
+            File file = fileChooser.getSelectedFile();
+            if (!file.getName().toLowerCase().endsWith(".png")) {
+                file = new File(file.getAbsolutePath() + ".png");
+            }
+            viewModel.saveImage(file.getAbsolutePath(), innerImage);
+        });
+        saveAsFile.addActionListener(_ -> {
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.showSaveDialog(null);
+            File file = fileChooser.getSelectedFile();
+            if (!file.getName().toLowerCase().endsWith(".fractalo")) {
+                file = new File(file.getAbsolutePath() + ".fractalo");
+            }
+            viewModel.saveSettings(file.getAbsolutePath());
+        });
+
+        openFile.addActionListener(_ -> {
+            JFileChooser fileChooser = new JFileChooser();
+
+            FileNameExtensionFilter filter = new FileNameExtensionFilter("My Format Files (*.fractalo)", "fractalo");
+            fileChooser.setFileFilter(filter);
+
+            int option = fileChooser.showOpenDialog(this);
+            if (option == JFileChooser.APPROVE_OPTION) {
+                File file = fileChooser.getSelectedFile();
+
+                if (file.getName().toLowerCase().endsWith(".fractalo")) {
+                    viewModel.openFile(
+                            panel.getHeight(),
+                            panel.getWidth(),
+                            file.getAbsolutePath()
+                    );
+                } else {
+                    JOptionPane.showMessageDialog(this, "Неверный формат файла!", "Ошибка", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+
+        });
+
         setMinimumSize(new Dimension(500, 500));
 
         setJMenuBar(menuBar);
@@ -48,6 +98,19 @@ public class FractalFrame extends JFrame {
         JMenuItem undo = new JMenuItem("Undo");
         actionsMenu.add(undo);
         undo.addActionListener(_ -> viewModel.goBack(panel.getHeight(), panel.getWidth()));
+
+
+        InputMap inputMap = panel.getInputMap(JComponent.WHEN_FOCUSED);
+        ActionMap actionMap = panel.getActionMap();
+
+        inputMap.put(KeyStroke.getKeyStroke("control Z"), "Undo");
+
+        actionMap.put("Undo", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                viewModel.goBack(panel.getHeight(), panel.getWidth());
+            }
+        });
 
         add(panel);
 
@@ -81,8 +144,14 @@ public class FractalFrame extends JFrame {
                 selector.setGraphics(panel.getGraphics());
                 selector.updateCoordinates(width, height);
 
+                if (innerImage.getHeight() <= panel.getHeight() ||
+                        innerImage.getWidth() <= panel.getWidth())
+                    viewModel.print(panel.getHeight(), panel.getWidth());
+
             }
         });
+
+
 
         panel.addMouseListener(new MouseAdapter() {
             @Override
@@ -118,19 +187,6 @@ public class FractalFrame extends JFrame {
             }
         });
 
-        panel.addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentResized(ComponentEvent e) {
-                super.componentResized(e);
-
-                if (innerImage.getHeight() <= panel.getHeight() ||
-                        innerImage.getWidth() <= panel.getWidth())
-                    viewModel.print(panel.getHeight(), panel.getWidth());
-
-            }
-        });
-        setVisible(true);
-
         viewModel.init(
                 panel.getHeight(),
                 panel.getWidth(),
@@ -139,5 +195,7 @@ public class FractalFrame extends JFrame {
                     panel.repaint();
                 }
         );
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setVisible(true);
     }
 }
